@@ -3,8 +3,8 @@
 Kijimuna aim to be a chat system which has characteristic below
 
 - Communication as a Service. Providing communication protocol instead of full-stack chat system
-- Adaptable and Composable from other system
-- Support indivisual, group communication
+- Adaptable and composable with other system. System can be use kijimuna to make UI under their design system
+- Support individual, group communication
 - Text chat with Websocket
 - Video / Voice chat with WebRTC
 - Providing API to manipulating chat
