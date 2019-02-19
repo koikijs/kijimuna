@@ -1,0 +1,31 @@
+{
+  "name": "kijimuna",
+  "version": "1.0.0",
+  "description": "Communication as a Service",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koikijs/kijimuna.git"
+  },
+  "keywords": [
+    "chat",
+    "koiki"
+  ],
+  "author": "sideroad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/koikijs/kijimuna/issues"
+  },
+  "homepage": "https://github.com/koikijs/kijimuna#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
+    "express": "^4.16.4",
+    "peer": "^0.2.10",
+    "socket.io": "^2.2.0",
+    "ws": "^6.1.4"
+  }
+}
