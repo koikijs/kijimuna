@@ -21,15 +21,15 @@ Kijimuna aim to be a chat system which has characteristic below
 
 ### RS
 
-- secretKey
-- clientKey
+- secret
+- client
 
 ## GET - /api/groups
 
 ### RQ Header
 
-- clientKey
-- secretKey
+- client
+- secret
 
 ### RQ Query
 
@@ -48,8 +48,8 @@ Kijimuna aim to be a chat system which has characteristic below
 
 ### RQ Header
 
-- clientKey
-- secretKey
+- client
+- secret
 
 ### RS
 
@@ -62,8 +62,8 @@ Kijimuna aim to be a chat system which has characteristic below
 
 ### RQ Header
 
-- clientKey
-- secretKey
+- client
+- secret
 
 ### RQ Query
 
@@ -82,8 +82,8 @@ Kijimuna aim to be a chat system which has characteristic below
 
 ### RQ Header
 
-- clientKey
-- secretKey
+- client
+- secret
 
 ### RQ Query
 
@@ -99,3 +99,27 @@ Kijimuna aim to be a chat system which has characteristic below
 - items[...].text
 - items[...].time
 - items[...].posted
+
+## POST - /api/connects
+
+### RQ Header
+
+- secret
+- client
+
+### RQ Query
+
+- group
+- user
+
+### RS
+
+- token
+
+# Environment variables
+
+For kijimuna contributer
+
+- KIJIMUNA_HASH_SECRET
+- KIJIMUNA_CHAUS_CLIENT_ID
+- KIJIMUNA_CHAUS_SECRET_ID
