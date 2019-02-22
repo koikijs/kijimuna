@@ -4,8 +4,10 @@
   "description": "Communication as a Service",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && node dist/index",
+    "start": "npm run test && npm run build && node dist/index",
     "build": "babel src --out-dir dist",
+    "trancate": "npx babel-node bin/trancate-services",
+    "test": "jest",
     "p": "prettier --write 'src/**/*.js'",
     "p:w": "onchange 'src/**/*.js' -- prettier --write {{changed}}"
   },
@@ -38,6 +40,7 @@
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.3.3",
+    "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.3.1",
     "eslint": "^5.14.1",
     "eslint-config-prettier": "^4.0.0",
@@ -47,6 +50,8 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0"
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.1.0",
+    "superagent-mocker": "^0.5.2"
   }
 }

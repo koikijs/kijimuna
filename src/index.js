@@ -14,4 +14,4 @@ app.use(bodyParser.urlencoded({ extended: false }));
 api(app);
 ws(app);
 
-app.listen(process.env.PORT || 5432);
+app.listen(process.env.PORT || 3000);

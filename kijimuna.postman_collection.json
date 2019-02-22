@@ -1,0 +1,31 @@
+{
+	"info": {
+		"_postman_id": "45e42523-6853-49da-954a-7a53f7793072",
+		"name": "kijimuna",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/api/services",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/services",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"services"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
