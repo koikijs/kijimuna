@@ -3,15 +3,16 @@ import uuidv4 from 'uuid/v4';
 
 const KIJIMUNA_CHAUS_CLIENT_ID = process.env.KIJIMUNA_CHAUS_CLIENT_ID;
 const KIJIMUNA_CHAUS_SECRET_ID = process.env.KIJIMUNA_CHAUS_SECRET_ID;
+const headers = {
+  'x-chaus-client': KIJIMUNA_CHAUS_CLIENT_ID,
+  'x-chaus-secret': KIJIMUNA_CHAUS_SECRET_ID
+};
 
 const services = {};
 export function init() {
   return request
     .get('https://chaus.now.sh/apis/kijimuna/services')
-    .set({
-      'x-chaus-client': KIJIMUNA_CHAUS_CLIENT_ID,
-      'x-chaus-secret': KIJIMUNA_CHAUS_SECRET_ID
-    })
+    .set(headers)
     .then(
       response => {
         response.body.items.forEach(service => {
@@ -35,10 +36,7 @@ export function issue() {
   };
   return request
     .post('https://chaus.now.sh/apis/kijimuna/services')
-    .set({
-      'x-chaus-client': KIJIMUNA_CHAUS_CLIENT_ID,
-      'x-chaus-secret': KIJIMUNA_CHAUS_SECRET_ID
-    })
+    .set(headers)
     .send(data)
     .then(response => {
       set({

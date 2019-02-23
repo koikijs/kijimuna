@@ -1,0 +1,284 @@
+swagger: '2.0'
+info:
+  description: ''
+  version: '1.0.0'
+  title: 'Kijimuna'
+  contact:
+    email: 'sideroad.jp@gmail.com'
+  license:
+    name: 'MIT'
+host: 'kijimuna.now.sh'
+tags:
+  - name: 'service'
+    description: ''
+  - name: 'group'
+    description: ''
+  - name: 'user'
+    description: ''
+schemes:
+  - 'https'
+paths:
+  /api/services:
+    post:
+      tags:
+        - 'service'
+      summary: 'Create new service to use kijimuna'
+      description: 'It returns `client`, `secret`. Use the keys in request header to call other endpoint'
+      consumes:
+        - 'application/json'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            $ref: '#/definitions/Service'
+  /api/groups:
+    post:
+      tags:
+        - 'group'
+      summary: 'Create group'
+      description: ''
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'client'
+          in: 'header'
+          type: 'string'
+          description: '`client` which is generated when creating service'
+          required: true
+        - name: 'secret'
+          in: 'header'
+          type: 'string'
+          description: '`secret` which is generated when creating service'
+          required: true
+        - name: 'body'
+          in: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              name:
+                type: 'string'
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: 'object'
+            properties:
+              id:
+                type: 'string'
+    get:
+      tags:
+        - 'group'
+      summary: 'Fetch all group'
+      description: ''
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'client'
+          in: 'header'
+          type: 'string'
+          description: '`client` which is generated when creating service'
+          required: true
+        - name: 'secret'
+          in: 'header'
+          type: 'string'
+          description: '`secret` which is generated when creating service'
+          required: true
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: 'object'
+            properties:
+              items:
+                type: 'array'
+                items:
+                  type: 'object'
+                  properties:
+                    id:
+                      type: 'string'
+                    name:
+                      type: 'string'
+  /api/groups/:id:
+    get:
+      tags:
+        - 'group'
+      summary: 'Fetch group'
+      description: ''
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'client'
+          in: 'header'
+          type: 'string'
+          description: '`client` which is generated when creating service'
+          required: true
+        - name: 'secret'
+          in: 'header'
+          type: 'string'
+          description: '`secret` which is generated when creating service'
+          required: true
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            $ref: '#/definitions/Group'
+
+  /api/users:
+    post:
+      tags:
+        - 'user'
+      summary: 'Create user'
+      description: ''
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'client'
+          in: 'header'
+          type: 'string'
+          description: '`client` which is generated when creating service'
+          required: true
+        - name: 'secret'
+          in: 'header'
+          type: 'string'
+          description: '`secret` which is generated when creating service'
+          required: true
+        - name: 'body'
+          in: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              name:
+                type: 'string'
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: 'object'
+            properties:
+              id:
+                type: 'string'
+    get:
+      tags:
+        - 'user'
+      summary: 'Fetch all user'
+      description: ''
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'client'
+          in: 'header'
+          type: 'string'
+          description: '`client` which is generated when creating service'
+          required: true
+        - name: 'secret'
+          in: 'header'
+          type: 'string'
+          description: '`secret` which is generated when creating service'
+          required: true
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: 'object'
+            properties:
+              items:
+                type: 'array'
+                items:
+                  $ref: '#/definitions/User'
+
+  /api/token:
+    post:
+      tags:
+        - 'token'
+      summary: 'Generate token'
+      description: ''
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'client'
+          in: 'header'
+          type: 'string'
+          description: '`client` which is generated when creating service'
+          required: true
+        - name: 'secret'
+          in: 'header'
+          type: 'string'
+          description: '`secret` which is generated when creating service'
+          required: true
+        - name: 'body'
+          in: 'body'
+          description: ''
+          required: true
+          schema:
+            type: 'object'
+            properties:
+              group:
+                type: 'string'
+              user:
+                type: 'string'
+      responses:
+        200:
+          description: 'successful operation'
+          schema:
+            type: 'object'
+            properties:
+              token:
+                type: 'string'
+definitions:
+  Service:
+    type: 'object'
+    properties:
+      client:
+        type: 'string'
+      secret:
+        type: 'string'
+  Group:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+      name:
+        type: 'string'
+      attendees:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            id:
+              type: 'string'
+            name:
+              type: 'string'
+  User:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+      name:
+        type: 'string'
+      groups:
+        type: 'array'
+        items:
+          type: 'object'
+          properties:
+            id:
+              type: 'string'
+            name:
+              type: 'string'
+  Message:
+    type: 'object'
+    properties:
+      id:
+        type: 'string'
+      text:
+        type: 'string'
+      posted:
+        type: 'string'
+      time:
+        type: 'string'
+        format: 'date-time'

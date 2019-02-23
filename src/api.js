@@ -1,6 +1,10 @@
 import request from 'superagent';
 import service from './service';
+import group from './group';
+import user from './user';
+import attendee from './attendee';
 import token from './token';
+import validate from './validate';
 
 export default function(app) {
   service.init();
@@ -19,48 +23,102 @@ export default function(app) {
       }
     );
   });
-  app.get('/api/connects', (req, res) => {
-    const id = service.get(req);
-    if (!id) {
-      res
-        .status(400)
-        .json({ error: 'Invalid client / secret in request header' });
+  app.get('/api/groups', (req, res) => {
+    if (!validate.service(req, res)) {
       return;
     }
-    if (!req.query.group || !req.query.user) {
-      res
-        .status(400)
-        .json({ error: 'group and user request parameter are required' });
+    group.gets(req).then(
+      body => res.json(body),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+  app.get('/api/groups/:id', (req, res) => {
+    if (!validate.service(req, res)) {
       return;
     }
-    request
-      .get('https://chaus.now.sh/apis/kijimuna/attendees')
-      .send({
-        service: id,
-        group: req.query.group,
-        user: req.query.user
-      })
-      .then(
-        response => {
-          if (response.body.items.length !== 1) {
-            res.status(404).json({
-              error: 'user not found.'
-            });
-            return;
-          }
-          res.json({
-            token: token.issue({
-              service: id,
-              group: req.query.group,
-              user: req.query.user
-            })
+    if (!req.params.id) {
+      res.status(400).json({ error: 'Invalid group id' });
+    }
+    group.get(req).then(
+      body => res.json(body),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+  app.post('/api/groups', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    if (!req.body.name) {
+      res.status(400).json({ error: '"name" in request body is required' });
+    }
+    group.post(req).then(
+      response => res.json({ id: response.body.id }),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+  app.get('/api/users', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    user.gets(req).then(
+      body => res.json(body),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+
+  app.post('/api/users', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    if (!req.body.name) {
+      res.status(400).json({ error: '"name" in request body is required' });
+    }
+    user.post(req).then(
+      response => res.json({ id: response.body.id }),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+  app.post('/api/token', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    if (!req.body.group) {
+      res.status(400).json({ error: '"group" in request body is required' });
+    }
+    if (!req.body.user) {
+      res.status(400).json({ error: '"user" in request body is required' });
+    }
+    attendee.gets(req).then(
+      items => {
+        if (items.length !== 1) {
+          res.status(404).json({
+            error: 'user not found.'
           });
-        },
-        error => {
-          console.log(error);
-          res.status(500).json({});
+          return;
         }
-      );
+        res.json({
+          token: token.issue({
+            service: id,
+            group: req.query.group,
+            user: req.query.user
+          })
+        });
+      },
+      error => {
+        console.log(error);
+        res.status(500).json({});
+      }
+    );
   });
   return app;
 }
