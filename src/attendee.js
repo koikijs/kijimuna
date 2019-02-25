@@ -15,12 +15,24 @@ export function gets(req) {
     .set(headers)
     .send({
       service: service.get(req),
-      group: req.query.group,
-      user: req.query.user
+      group: req.body.group,
+      user: req.body.user
     })
     .then(response => response.body.items);
 }
 
+export function post(req) {
+  return request
+    .post('https://chaus.now.sh/apis/kijimuna/attendees')
+    .set(headers)
+    .send({
+      service: service.get(req),
+      group: req.body.group,
+      user: req.body.user
+    });
+}
+
 export default {
-  gets
+  gets,
+  post
 };

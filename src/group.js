@@ -27,6 +27,7 @@ export function gets(req) {
 }
 
 export function get(req) {
+  console.log(req.params.id);
   return Promise.all([
     request
       .get(`https://chaus.now.sh/apis/kijimuna/groups/${req.params.id}`)
@@ -43,10 +44,13 @@ export function get(req) {
         group: req.params.id,
         limit: 1000
       })
-  ]).then(([group, attendees]) => ({
-    ...group.body,
-    attendees: attendees.body.items.map(item => item.user.id)
-  }));
+  ]).then(
+    ([group, attendees]) =>
+      console.log(group, attendees) || {
+        ...group.body,
+        attendees: attendees.body.items.map(item => item.user.id)
+      }
+  );
 }
 
 export function post(req) {

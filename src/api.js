@@ -88,10 +88,28 @@ export default function(app) {
       }
     );
   });
+  app.post('/api/attendees', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    if (!req.body.group) {
+      res.status(400).json({ error: '"group" in request body is required' });
+    }
+    if (!req.body.user) {
+      res.status(400).json({ error: '"user" in request body is required' });
+    }
+    attendee.post(req).then(
+      response => res.json({ id: response.body.id }),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
   app.post('/api/token', (req, res) => {
     if (!validate.service(req, res)) {
       return;
     }
+    const id = service.get(req);
     if (!req.body.group) {
       res.status(400).json({ error: '"group" in request body is required' });
     }
@@ -102,15 +120,15 @@ export default function(app) {
       items => {
         if (items.length !== 1) {
           res.status(404).json({
-            error: 'user not found.'
+            error: 'user does not found in the group.'
           });
           return;
         }
         res.json({
           token: token.issue({
             service: id,
-            group: req.query.group,
-            user: req.query.user
+            group: req.body.group,
+            user: req.body.user
           })
         });
       },

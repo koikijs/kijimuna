@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "/api/services",
+			"name": "/api/services - POST",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -22,6 +22,262 @@
 					"path": [
 						"api",
 						"services"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/groups - GET",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b",
+						"type": "text"
+					},
+					{
+						"key": "secret",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/groups",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/groups/:id - GET",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client",
+						"type": "text",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b"
+					},
+					{
+						"key": "secret",
+						"type": "text",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/groups/67157f9",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"67157f9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/groups - POST",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b",
+						"type": "text"
+					},
+					{
+						"key": "secret",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"test\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/groups",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"groups"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users - POST",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client",
+						"type": "text",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b"
+					},
+					{
+						"key": "secret",
+						"type": "text",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\": \"test\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users - GET",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b",
+						"type": "text"
+					},
+					{
+						"key": "secret",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/users",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/attendees - POST",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client",
+						"type": "text",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b"
+					},
+					{
+						"key": "secret",
+						"type": "text",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"user\": \"67157f9\",\n\t\"group\": \"67157f9\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/attendees",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"attendees"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/token - POST",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "client",
+						"type": "text",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b"
+					},
+					{
+						"key": "secret",
+						"type": "text",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"group\": \"67157f9\",\n\t\"user\": \"67157f9\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/token",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"token"
 					]
 				}
 			},

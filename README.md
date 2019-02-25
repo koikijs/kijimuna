@@ -116,6 +116,39 @@ Kijimuna aim to be a chat system which has characteristic below
 
 - token
 
+# Websocket
+
+| Action ID (a) | Action          | Data (d)                                                   |
+| ------------- | --------------- | ---------------------------------------------------------- |
+| 1             | Member updates  | ms: list of users ID                                       |
+| 2             | Send message    | i: message id, m: message, t: timestamp, p: posted user ID |
+| 3             | Fetch histories | h: list of chat history                                    |
+
+## Sending message example
+
+```
+{
+  "a":2,
+  "d": {
+    "m": "test message"
+  }
+}
+```
+
+## Get message example
+
+```
+{
+  "a":2,
+  "d": {
+    "i": "5c73fc6510629c189f94e04c",
+    "m": "test message",
+    "t": "1551105125856",
+    "p": "67157f9"
+  }
+}
+```
+
 # Environment variables
 
 For kijimuna contributer

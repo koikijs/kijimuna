@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { PROPS } from './constants';
 
 mongoose.connect(
   process.env.KIJIMUNA_MONGO_URI,
@@ -6,8 +7,34 @@ mongoose.connect(
 );
 
 const Message = mongoose.model('Message', {
-  time: Date,
-  text: String,
-  posted: String,
-  group: String
+  [PROPS.TIME]: Number,
+  [PROPS.MESSAGE]: String,
+  [PROPS.POSTED]: String,
+  [PROPS.GROUP]: String,
+  [PROPS.SERVICE]: String
 });
+
+export function gets({ before, group }) {
+  console.log(group, before);
+  return Message.find(
+    { [PROPS.GROUP]: group, [PROPS.TIME]: { $lte: before } },
+    `${PROPS.TIME} ${PROPS.MESSAGE} ${PROPS.POSTED}`,
+    { limit: 10 }
+  ).then(items =>
+    items.map(item => ({
+      [PROPS.ID]: item._id,
+      [PROPS.MESSAGE]: item[PROPS.MESSAGE],
+      [PROPS.POSTED]: item[PROPS.POSTED],
+      [PROPS.TIME]: item[PROPS.TIME]
+    }))
+  );
+}
+
+export function save(msg) {
+  return new Message(msg).save();
+}
+
+export default {
+  gets,
+  save
+};
