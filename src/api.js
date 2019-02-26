@@ -11,7 +11,6 @@ export default function(app) {
   app.post('/api/services', (req, res) => {
     service.issue().then(
       response => {
-        console.log(response);
         res.json({
           client: response.client,
           secret: response.secret
@@ -130,7 +129,7 @@ export default function(app) {
         });
       },
       error => {
-        console.log(error);
+        console.error(error);
         res.status(500).json({});
       }
     );

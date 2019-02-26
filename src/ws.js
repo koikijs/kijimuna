@@ -9,8 +9,6 @@ const connects = {};
 export function send(ws, from, data) {
   const json = JSON.stringify(data);
   ws.send(json);
-  // eslint-disable-next-line no-console
-  console.log(`from:${from.id} to:${ws.id} data:${json}`);
 }
 
 export function multicast(clients, msg, from) {
@@ -20,7 +18,6 @@ export function multicast(clients, msg, from) {
 }
 
 export function updateMember({ clients, attendees }, ws) {
-  console.log(clients);
   multicast(
     clients,
     {
@@ -101,7 +98,7 @@ export default function(app) {
               json = JSON.parse(msg);
             } catch (e) {
               // eslint-disable-next-line no-console
-              console.log(e);
+              console.error(e);
               return;
             }
             if (!json[PROPS.DATA]) {

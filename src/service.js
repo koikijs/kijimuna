@@ -20,11 +20,10 @@ export function init() {
             ...service
           };
         });
-        console.log(services);
         return services;
       },
       error => {
-        console.log(error);
+        console.error(error);
       }
     );
 }
