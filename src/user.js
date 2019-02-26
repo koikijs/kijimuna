@@ -8,7 +8,7 @@ const headers = {
   'x-chaus-client': KIJIMUNA_CHAUS_CLIENT_ID,
   'x-chaus-secret': KIJIMUNA_CHAUS_SECRET_ID
 };
-export function gets(req) {
+export function gets({ req }) {
   return request
     .get('https://chaus.now.sh/apis/kijimuna/users')
     .set(headers)
@@ -26,7 +26,7 @@ export function gets(req) {
     }));
 }
 
-export function post(req) {
+export function post({ req }) {
   return request
     .post('https://chaus.now.sh/apis/kijimuna/users')
     .set(headers)

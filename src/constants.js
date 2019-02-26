@@ -7,7 +7,8 @@ export const PROPS = {
   MESSAGE: 'm',
   GROUP: 'g',
   SERVICE: 's',
-  MEMBERS: 'ms',
+  ONLINE_MEMBERS: 'on',
+  OFFLINE_MEMBERS: 'off',
   HISTORY: 'h'
 };
 

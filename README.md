@@ -113,11 +113,11 @@ Kijimuna aim to be a chat system which has characteristic below
 
 # Websocket
 
-| Action ID (a) | Action          | Data (d)                                                   |
-| ------------- | --------------- | ---------------------------------------------------------- |
-| 1             | Member updates  | ms: list of users ID                                       |
-| 2             | Send message    | i: message id, m: message, t: timestamp, p: posted user ID |
-| 3             | Fetch histories | h: list of chat history                                    |
+| Action ID (a) | Action                | Data (d)                                                     |
+| ------------- | --------------------- | ------------------------------------------------------------ |
+| 1             | Online member updates | on: list of online member ID, off: list of offline member ID |
+| 2             | Send message          | i: message id, m: message, t: timestamp, p: posted user ID   |
+| 3             | Fetch histories       | h: list of chat history                                      |
 
 ## Sending message example
 
@@ -140,6 +140,53 @@ Kijimuna aim to be a chat system which has characteristic below
     "m": "test message",
     "t": "1551105125856",
     "p": "67157f9"
+  }
+}
+```
+
+## Get online memebers update example
+
+```
+{
+  "a": 1,
+  "d": {
+    "on": [
+      {
+        "id": "67157f9",
+        "name": "test"
+      }
+    ],
+    "off": [
+      {
+        "id": "f806399",
+        "name": "test2"
+      }
+    ]
+  }
+}
+```
+
+## Fetch chat history example
+
+```
+
+{
+  "a": 3,
+  "d": {
+    "h": [
+      {
+        "i": "5c73f6c2d2ba5716cda127b5",
+        "m": "hello",
+        "p": "67157f9",
+        "t": 1551104000000
+      },
+      {
+        "i": "5c73fc6510629c189f94e04c",
+        "m": "world",
+        "p": "67157f9",
+        "t": 1551105125856
+      }
+    ]
   }
 }
 ```

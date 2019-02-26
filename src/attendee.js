@@ -9,7 +9,7 @@ const headers = {
   'x-chaus-secret': KIJIMUNA_CHAUS_SECRET_ID
 };
 
-export function gets(req) {
+export function gets({ req }) {
   return request
     .get('https://chaus.now.sh/apis/kijimuna/attendees')
     .set(headers)
@@ -21,7 +21,7 @@ export function gets(req) {
     .then(response => response.body.items);
 }
 
-export function post(req) {
+export function post({ req }) {
   return request
     .post('https://chaus.now.sh/apis/kijimuna/attendees')
     .set(headers)

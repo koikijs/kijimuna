@@ -27,7 +27,7 @@ export default function(app) {
     if (!validate.service(req, res)) {
       return;
     }
-    group.gets(req).then(
+    group.gets({ req }).then(
       body => res.json(body),
       error => {
         res.status(error.status).json(error.response.body);
@@ -41,7 +41,7 @@ export default function(app) {
     if (!req.params.id) {
       res.status(400).json({ error: 'Invalid group id' });
     }
-    group.get(req).then(
+    group.get({ req }).then(
       body => res.json(body),
       error => {
         res.status(error.status).json(error.response.body);
@@ -55,7 +55,7 @@ export default function(app) {
     if (!req.body.name) {
       res.status(400).json({ error: '"name" in request body is required' });
     }
-    group.post(req).then(
+    group.post({ req }).then(
       response => res.json({ id: response.body.id }),
       error => {
         res.status(error.status).json(error.response.body);
@@ -66,7 +66,7 @@ export default function(app) {
     if (!validate.service(req, res)) {
       return;
     }
-    user.gets(req).then(
+    user.gets({ req }).then(
       body => res.json(body),
       error => {
         res.status(error.status).json(error.response.body);
@@ -81,7 +81,7 @@ export default function(app) {
     if (!req.body.name) {
       res.status(400).json({ error: '"name" in request body is required' });
     }
-    user.post(req).then(
+    user.post({ req }).then(
       response => res.json({ id: response.body.id }),
       error => {
         res.status(error.status).json(error.response.body);
@@ -95,7 +95,7 @@ export default function(app) {
     if (!req.body.user) {
       res.status(400).json({ error: '"user" in request body is required' });
     }
-    attendee.post(req).then(
+    attendee.post({ req }).then(
       response => res.json({ id: response.body.id }),
       error => {
         res.status(error.status).json(error.response.body);
@@ -113,7 +113,7 @@ export default function(app) {
     if (!req.body.user) {
       res.status(400).json({ error: '"user" in request body is required' });
     }
-    attendee.gets(req).then(
+    attendee.gets({ req }).then(
       items => {
         if (items.length !== 1) {
           res.status(404).json({

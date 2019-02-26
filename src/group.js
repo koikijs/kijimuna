@@ -8,7 +8,7 @@ const headers = {
   'x-chaus-client': KIJIMUNA_CHAUS_CLIENT_ID,
   'x-chaus-secret': KIJIMUNA_CHAUS_SECRET_ID
 };
-export function gets(req) {
+export function gets({ req }) {
   return request
     .get('https://chaus.now.sh/apis/kijimuna/groups')
     .set(headers)
@@ -26,37 +26,36 @@ export function gets(req) {
     }));
 }
 
-export function get(req) {
-  console.log(req.params.id);
+export function get({ req, params = {} }) {
   return Promise.all([
     request
-      .get(`https://chaus.now.sh/apis/kijimuna/groups/${req.params.id}`)
+      .get(
+        `https://chaus.now.sh/apis/kijimuna/groups/${params.group ||
+          req.params.id}`
+      )
       .set(headers)
       .query({
-        service: service.get(req),
+        service: params.service || service.get(req),
         fields: 'id,name'
       }),
     request
       .get('https://chaus.now.sh/apis/kijimuna/attendees?expands=user')
       .set(headers)
       .query({
-        service: service.get(req),
-        group: req.params.id,
+        service: params.service || service.get(req),
+        group: params.group || req.params.id,
         limit: 1000
       })
-  ]).then(
-    ([group, attendees]) =>
-      console.log(group, attendees) || {
-        ...group.body,
-        attendees: attendees.body.items.map(item => ({
-          id: item.user.id,
-          name: item.user.name
-        }))
-      }
-  );
+  ]).then(([group, attendees]) => ({
+    ...group.body,
+    attendees: attendees.body.items.map(item => ({
+      id: item.user.id,
+      name: item.user.name
+    }))
+  }));
 }
 
-export function post(req) {
+export function post({ req }) {
   return request
     .post('https://chaus.now.sh/apis/kijimuna/groups')
     .set(headers)
