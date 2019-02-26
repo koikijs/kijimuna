@@ -18,14 +18,6 @@ export function multicast(clients, msg, from) {
   });
 }
 
-export function multicastWithoutSender(clients, msg, from) {
-  clients.forEach(ws => {
-    if (from.id !== ws.id) {
-      send(ws, from, msg);
-    }
-  });
-}
-
 export function updateMember(clients, ws) {
   console.log(clients);
   multicast(
@@ -40,90 +32,111 @@ export function updateMember(clients, ws) {
   );
 }
 
+export function fetchHistory({ connector, before, ws }) {
+  message.gets({ group: connector.group, before }).then(docs => {
+    send(ws, ws, {
+      [PROPS.ACTION]: ACTION_ID.FETCH_HISTORY,
+      [PROPS.DATA]: {
+        [PROPS.HISTORY]: docs
+      }
+    });
+  });
+}
+
 export default function(app) {
   app.ws('/ws/connects/:token', (ws, req) => {
-    const connector = token.pop(req.params.token);
-    if (!connector) {
-      ws.close();
-      return;
-    }
-    // eslint-disable-next-line no-param-reassign
-    ws.id = connector.user;
-    // eslint-disable-next-line no-console
-    console.log('connected!');
-
-    // Initialize group if not exists
-    if (!connects[connector.group]) {
-      connects[connector.group] = {
-        clients: []
-      };
-    }
-
-    // Store onto clients
-    connects[connector.group].clients.push(ws);
-
-    // Notify all members
-    updateMember(connects[connector.group].clients, ws);
-
-    // Fetch chat history
-    message
-      .gets({ group: connector.group, before: new Date().getTime() })
-      .then(docs => {
-        console.log(docs);
-        send(ws, ws, {
-          [PROPS.ACTION]: ACTION_ID.HISTORY,
-          [PROPS.DATA]: {
-            [PROPS.HISTORY]: docs
-          }
-        });
-      });
-
-    ws.on('close', () => {
-      // eslint-disable-next-line no-param-reassign
-      connects[connector.group].clients = connects[
-        connector.group
-      ].clients.filter(client => client.id !== ws.id);
-      updateMember(connects[connector.group].clients, ws);
-    });
-
-    ws.on('message', msg => {
-      let json = {};
-      try {
-        json = JSON.parse(msg);
-      } catch (e) {
+    token.pop(req.params.token).then(
+      connector => {
+        // eslint-disable-next-line no-param-reassign
+        ws.id = connector.user;
         // eslint-disable-next-line no-console
-        console.log(e);
-        return;
-      }
-      switch (json[PROPS.ACTION]) {
-        case ACTION_ID.SEND:
-          if (!json[PROPS.DATA] || !json[PROPS.DATA][PROPS.MESSAGE]) {
-            break;
+        console.log('connected!');
+
+        // Initialize group if not exists
+        if (!connects[connector.group]) {
+          connects[connector.group] = {
+            clients: []
+          };
+        }
+
+        // Store onto clients
+        connects[connector.group].clients.push(ws);
+
+        // Notify all members
+        updateMember(connects[connector.group].clients, ws);
+
+        // Fetch chat history
+        fetchHistory({
+          connector,
+          before: new Date().getTime(),
+          ws
+        });
+
+        ws.on('close', () => {
+          // eslint-disable-next-line no-param-reassign
+          connects[connector.group].clients = connects[
+            connector.group
+          ].clients.filter(client => client.id !== ws.id);
+          updateMember(connects[connector.group].clients, ws);
+        });
+
+        ws.on('message', msg => {
+          let json = {};
+          try {
+            json = JSON.parse(msg);
+          } catch (e) {
+            // eslint-disable-next-line no-console
+            console.log(e);
+            return;
           }
-          const member = ws.id;
-          const time = new Date().getTime();
-          multicastWithoutSender(
-            connects[connector.group].clients,
-            {
-              [PROPS.ACTION]: ACTION_ID.SEND,
-              [PROPS.DATA]: {
+          if (!json[PROPS.DATA]) {
+            return;
+          }
+          switch (json[PROPS.ACTION]) {
+            case ACTION_ID.SEND:
+              if (!json[PROPS.DATA][PROPS.MESSAGE]) {
+                return;
+              }
+              const member = ws.id;
+              const time = new Date().getTime();
+              multicast(
+                connects[connector.group].clients,
+                {
+                  [PROPS.ACTION]: ACTION_ID.SEND,
+                  [PROPS.DATA]: {
+                    [PROPS.TIME]: time,
+                    [PROPS.MESSAGE]: json[PROPS.DATA][PROPS.MESSAGE],
+                    [PROPS.POSTED]: member || 'unknown'
+                  }
+                },
+                ws
+              );
+              message.save({
+                [PROPS.GROUP]: connector.group,
+                [PROPS.SERVICE]: connector.service,
                 [PROPS.TIME]: time,
                 [PROPS.MESSAGE]: json[PROPS.DATA][PROPS.MESSAGE],
                 [PROPS.POSTED]: member || 'unknown'
+              });
+              break;
+            case ACTION_ID.FETCH_HISTORY:
+              if (!json[PROPS.DATA][PROPS.BEFORE]) {
+                return;
               }
-            },
-            ws
-          );
-          message.save({
-            [PROPS.GROUP]: connector.group,
-            [PROPS.SERVICE]: connector.service,
-            [PROPS.TIME]: time,
-            [PROPS.MESSAGE]: json[PROPS.DATA][PROPS.MESSAGE],
-            [PROPS.POSTED]: member || 'unknown'
-          });
-          break;
-        default:
+              // Fetch chat history
+              fetchHistory({
+                connector,
+                before: json[PROPS.DATA][PROPS.BEFORE],
+                ws
+              });
+              break;
+            default:
+          }
+        });
+      },
+      () => {
+        ws.close();
       }
-    });
+    );
   });
 }

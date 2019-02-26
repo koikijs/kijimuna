@@ -7,7 +7,7 @@
     "start": "npm run test && npm run build && node dist/index",
     "build": "babel src --out-dir dist",
     "trancate": "npx babel-node bin/trancate-services",
-    "test": "jest",
+    "test": "jest src",
     "p": "prettier --write 'src/**/*.js'",
     "p:w": "onchange 'src/**/*.js' -- prettier --write {{changed}}"
   },
@@ -31,6 +31,7 @@
     "crypto": "^1.0.1",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
+    "ioredis": "^4.6.2",
     "mongoose": "^5.4.14",
     "peer": "^0.2.10",
     "socket.io": "^2.2.0",

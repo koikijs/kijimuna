@@ -17,7 +17,7 @@ const Message = mongoose.model('Message', {
 export function gets({ before, group }) {
   console.log(group, before);
   return Message.find(
-    { [PROPS.GROUP]: group, [PROPS.TIME]: { $lte: before } },
+    { [PROPS.GROUP]: group, [PROPS.TIME]: { $lt: before } },
     `${PROPS.TIME} ${PROPS.MESSAGE} ${PROPS.POSTED}`,
     { limit: 10 }
   ).then(items =>

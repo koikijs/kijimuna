@@ -1,6 +1,6 @@
 import token from '../token';
 
-test('issue token', () => {
+test('issue token', done => {
   const issuedToken = token.issue({
     service: 1,
     group: 2,
@@ -14,11 +14,15 @@ test('issue token', () => {
       user: 3
     })
   );
-
-  expect(token.pop(issuedToken)).toEqual({
-    service: 1,
-    group: 2,
-    user: 3
+  token.pop(issuedToken).then(res => {
+    expect(res).toEqual({
+      service: 1,
+      group: 2,
+      user: 3
+    });
+    token.pop(issuedToken).catch(err => {
+      expect(err).toBe('token not found');
+      done();
+    });
   });
-  expect(token.pop(issuedToken)).toBe(undefined);
 });
