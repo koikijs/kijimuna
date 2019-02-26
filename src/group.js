@@ -16,7 +16,7 @@ export function gets({ req }) {
       service: service.get(req),
       offset: req.query.offset || 0,
       limit: req.query.limit || 20,
-      fields: 'id,name'
+      fields: 'id,name,icon'
     })
     .then(({ body: { offset, limit, size, items } }) => ({
       offset,
@@ -36,7 +36,7 @@ export function get({ req, params = {} }) {
       .set(headers)
       .query({
         service: params.service || service.get(req),
-        fields: 'id,name'
+        fields: 'id,name,icon'
       }),
     request
       .get('https://chaus.now.sh/apis/kijimuna/attendees?expands=user')
@@ -50,7 +50,8 @@ export function get({ req, params = {} }) {
     ...group.body,
     attendees: attendees.body.items.map(item => ({
       id: item.user.id,
-      name: item.user.name
+      name: item.user.name,
+      icon: item.user.icon
     }))
   }));
 }
@@ -61,7 +62,8 @@ export function post({ req }) {
     .set(headers)
     .send({
       service: service.get(req),
-      name: req.body.name
+      name: req.body.name,
+      icon: req.body.icon
     });
 }
 

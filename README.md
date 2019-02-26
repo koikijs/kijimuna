@@ -41,6 +41,19 @@ Kijimuna aim to be a chat system which has characteristic below
 - total
 - items[...].id
 - items[...].name
+- items[...].icon
+
+## POST - /api/groups
+
+### RQ Header
+
+- client \*
+- secret \*
+
+### RQ Body
+
+- name \*
+- icon
 
 ## GET - /api/groups/:group-id
 
@@ -53,6 +66,7 @@ Kijimuna aim to be a chat system which has characteristic below
 
 - id
 - name
+- icon
 - attendees
 
 ## POST - /api/groups/:group-id/attendees
@@ -84,16 +98,20 @@ Kijimuna aim to be a chat system which has characteristic below
 - items
 - items[...].id
 - items[...].name
+- items[...].icon
 - items[...].groups
 
-### RS
+## POST - /api/users
 
-- total
-- items
-- items[...].id
-- items[...].text
-- items[...].time
-- items[...].posted
+### RQ Header
+
+- client \*
+- secret \*
+
+### RQ Body
+
+- name \*
+- icon
 
 ## POST - /api/token
 

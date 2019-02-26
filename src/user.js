@@ -16,7 +16,7 @@ export function gets({ req }) {
       service: service.get(req),
       offset: req.query.offset || 0,
       limit: req.query.limit || 20,
-      fields: 'id,name'
+      fields: 'id,name,icon'
     })
     .then(({ body: { offset, limit, size, items } }) => ({
       offset,
@@ -32,7 +32,8 @@ export function post({ req }) {
     .set(headers)
     .send({
       service: service.get(req),
-      name: req.body.name
+      name: req.body.name,
+      icon: req.body.icon
     });
 }
 export default {
