@@ -12,7 +12,7 @@ export const PROPS = {
 };
 
 export const ACTION_ID = {
-  MEMBER_UPDATES: 1, // Notify from host to user to update members join / left
+  ONLINE_MEMBER_UPDATES: 1, // Notify from host to user to update members join / left
   SEND: 2, // Notify from user to host and vice versa.
   FETCH_HISTORY: 3 // Notify from host to user to retrive past message
 };

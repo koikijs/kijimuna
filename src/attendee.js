@@ -27,7 +27,7 @@ export function post(req) {
     .set(headers)
     .send({
       service: service.get(req),
-      group: req.body.group,
+      group: req.params.id,
       user: req.body.user
     });
 }

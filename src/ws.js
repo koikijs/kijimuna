@@ -23,7 +23,7 @@ export function updateMember(clients, ws) {
   multicast(
     clients,
     {
-      [PROPS.ACTION]: ACTION_ID.MEMBER_UPDATES,
+      [PROPS.ACTION]: ACTION_ID.ONLINE_MEMBER_UPDATES,
       [PROPS.DATA]: {
         [PROPS.MEMBERS]: clients.map(ws => ws.id)
       }

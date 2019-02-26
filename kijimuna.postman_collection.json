@@ -157,7 +157,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"test\"\n}"
+					"raw": "{\n\t\"name\": \"test2\"\n}"
 				},
 				"url": {
 					"raw": "{{url}}/api/users",
@@ -229,15 +229,17 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"user\": \"67157f9\",\n\t\"group\": \"67157f9\"\n}"
+					"raw": "{\n\t\"user\": \"f806399\"\n}"
 				},
 				"url": {
-					"raw": "{{url}}/api/attendees",
+					"raw": "{{url}}/api/groups/67157f9/attendees",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
 						"api",
+						"groups",
+						"67157f9",
 						"attendees"
 					]
 				}

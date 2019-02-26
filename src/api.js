@@ -88,12 +88,9 @@ export default function(app) {
       }
     );
   });
-  app.post('/api/attendees', (req, res) => {
+  app.post('/api/groups/:id/attendees', (req, res) => {
     if (!validate.service(req, res)) {
       return;
-    }
-    if (!req.body.group) {
-      res.status(400).json({ error: '"group" in request body is required' });
     }
     if (!req.body.user) {
       res.status(400).json({ error: '"user" in request body is required' });

@@ -37,7 +37,7 @@ export function get(req) {
         fields: 'id,name'
       }),
     request
-      .get('https://chaus.now.sh/apis/kijimuna/attendees')
+      .get('https://chaus.now.sh/apis/kijimuna/attendees?expands=user')
       .set(headers)
       .query({
         service: service.get(req),
@@ -48,7 +48,10 @@ export function get(req) {
     ([group, attendees]) =>
       console.log(group, attendees) || {
         ...group.body,
-        attendees: attendees.body.items.map(item => item.user.id)
+        attendees: attendees.body.items.map(item => ({
+          id: item.user.id,
+          name: item.user.name
+        }))
       }
   );
 }
