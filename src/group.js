@@ -16,13 +16,16 @@ export function gets({ req }) {
       service: service.get(req),
       offset: req.query.offset || 0,
       limit: req.query.limit || 20,
-      fields: 'id,name,icon'
+      fields: 'id,name,icon,custom'
     })
     .then(({ body: { offset, limit, size, items } }) => ({
       offset,
       limit,
       size,
-      items
+      items: items.map(item => ({
+        ...item,
+        custom: item.custom ? JSON.stringify(item.custom) : null
+      }))
     }));
 }
 
@@ -36,7 +39,7 @@ export function get({ req, params = {} }) {
       .set(headers)
       .query({
         service: params.service || service.get(req),
-        fields: 'id,name,icon'
+        fields: 'id,name,icon,custom'
       }),
     request
       .get('https://chaus.now.sh/apis/kijimuna/attendees?expands=user')
@@ -48,10 +51,12 @@ export function get({ req, params = {} }) {
       })
   ]).then(([group, attendees]) => ({
     ...group.body,
+    custom: group.body.custom ? JSON.stringify(group.body.custom) : null,
     attendees: attendees.body.items.map(item => ({
       id: item.user.id,
       name: item.user.name,
-      icon: item.user.icon
+      icon: item.user.icon,
+      custom: item.user.custom ? JSON.stringify(item.user.custom) : null
     }))
   }));
 }
@@ -63,7 +68,8 @@ export function post({ req }) {
     .send({
       service: service.get(req),
       name: req.body.name,
-      icon: req.body.icon
+      icon: req.body.icon,
+      custom: req.body.custom ? JSON.stringify(req.body.custom) : null
     });
 }
 

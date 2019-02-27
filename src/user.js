@@ -16,13 +16,16 @@ export function gets({ req }) {
       service: service.get(req),
       offset: req.query.offset || 0,
       limit: req.query.limit || 20,
-      fields: 'id,name,icon'
+      fields: 'id,name,icon,custom'
     })
     .then(({ body: { offset, limit, size, items } }) => ({
       offset,
       limit,
       size,
-      items
+      items: items.map(item => ({
+        ...item,
+        custom: item.custom ? JSON.stringify(item.custom) : null
+      }))
     }));
 }
 
@@ -33,7 +36,8 @@ export function post({ req }) {
     .send({
       service: service.get(req),
       name: req.body.name,
-      icon: req.body.icon
+      icon: req.body.icon,
+      custom: req.body.custom ? JSON.stringify(req.body.custom) : null
     });
 }
 export default {

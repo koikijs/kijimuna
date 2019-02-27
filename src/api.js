@@ -54,6 +54,11 @@ export default function(app) {
     if (!req.body.name) {
       res.status(400).json({ error: '"name" in request body is required' });
     }
+    if (req.body.icon && !/^https:\/\/.+$/.test(req.body.icon)) {
+      res
+        .status(400)
+        .json({ error: '"icon" url should be start with https://' });
+    }
     group.post({ req }).then(
       response => res.json({ id: response.body.id }),
       error => {
@@ -79,6 +84,11 @@ export default function(app) {
     }
     if (!req.body.name) {
       res.status(400).json({ error: '"name" in request body is required' });
+    }
+    if (req.body.icon && !/^https:\/\/.+$/.test(req.body.icon)) {
+      res
+        .status(400)
+        .json({ error: '"icon" url should be start with https://' });
     }
     user.post({ req }).then(
       response => res.json({ id: response.body.id }),
