@@ -37,9 +37,6 @@ export default function(app) {
     if (!validate.service(req, res)) {
       return;
     }
-    if (!req.params.id) {
-      res.status(400).json({ error: 'Invalid group id' });
-    }
     group.get({ req }).then(
       body => res.json(body),
       error => {
@@ -61,6 +58,33 @@ export default function(app) {
     }
     group.post({ req }).then(
       response => res.json({ id: response.body.id }),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+  app.patch('/api/groups/:id', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    if (req.body.icon && !/^https:\/\/.+$/.test(req.body.icon)) {
+      res
+        .status(400)
+        .json({ error: '"icon" url should be start with https://' });
+    }
+    group.patch({ req }).then(
+      response => res.json({ id: response.body.id }),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+  app.delete('/api/groups/:id', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    group.remove({ req }).then(
+      response => res.json({}),
       error => {
         res.status(error.status).json(error.response.body);
       }
@@ -92,6 +116,46 @@ export default function(app) {
     }
     user.post({ req }).then(
       response => res.json({ id: response.body.id }),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+
+  app.get('/api/users/:id', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    user.get({ req }).then(
+      body => res.json(body),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+
+  app.patch('/api/users/:id', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    if (req.body.icon && !/^https:\/\/.+$/.test(req.body.icon)) {
+      res
+        .status(400)
+        .json({ error: '"icon" url should be start with https://' });
+    }
+    user.patch({ req }).then(
+      response => res.json({ id: response.body.id }),
+      error => {
+        res.status(error.status).json(error.response.body);
+      }
+    );
+  });
+  app.delete('/api/users/:id', (req, res) => {
+    if (!validate.service(req, res)) {
+      return;
+    }
+    user.remove({ req }).then(
+      response => res.json({}),
       error => {
         res.status(error.status).json(error.response.body);
       }

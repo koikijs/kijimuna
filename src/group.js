@@ -73,8 +73,27 @@ export function post({ req }) {
     });
 }
 
+export function patch({ req }) {
+  return request
+    .patch(`https://chaus.now.sh/apis/kijimuna/groups/${req.params.id}`)
+    .set(headers)
+    .send({
+      icon: req.body.icon,
+      custom: req.body.custom ? JSON.stringify(req.body.custom) : null
+    });
+}
+
+export function remove({ req }) {
+  return request
+    .delete(`https://chaus.now.sh/apis/kijimuna/groups/${req.params.id}`)
+    .set(headers)
+    .send();
+}
+
 export default {
   gets,
   get,
-  post
+  post,
+  patch,
+  remove
 };

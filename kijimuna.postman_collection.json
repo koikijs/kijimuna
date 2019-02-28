@@ -95,6 +95,46 @@
 			"response": []
 		},
 		{
+			"name": "/api/groups/:id - PATCH",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "client",
+						"type": "text",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b"
+					},
+					{
+						"key": "secret",
+						"type": "text",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"icon\": \"https://avatars3.githubusercontent.com/u/411486?s=460&v=4\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/groups/67157f9",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"groups",
+						"67157f9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "/api/groups - POST",
 			"request": {
 				"method": "POST",
@@ -157,7 +197,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"test2\"\n}"
+					"raw": "{\n\t\"name\": \"test6\",\n\t\"icon\": null,\n\t\"custom\": {\"a\": 1}\n}"
 				},
 				"url": {
 					"raw": "{{url}}/api/users",
@@ -200,6 +240,80 @@
 					"path": [
 						"api",
 						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users/:id - GET",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "client",
+						"type": "text",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b"
+					},
+					{
+						"key": "secret",
+						"type": "text",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{url}}/api/users/67157f9",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"67157f9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/users/:id - PATCH",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "client",
+						"type": "text",
+						"value": "c3aad50d-6d6c-4b91-8515-c50b9aee579b"
+					},
+					{
+						"key": "secret",
+						"type": "text",
+						"value": "090bc27c-eca8-40b9-8140-68e8a0c0b9b5"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"icon\": \"https://avatars3.githubusercontent.com/u/411486?s=460&v=4\"\n}"
+				},
+				"url": {
+					"raw": "{{url}}/api/users/67157f9",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"api",
+						"users",
+						"67157f9"
 					]
 				}
 			},

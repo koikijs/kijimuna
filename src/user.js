@@ -29,6 +29,40 @@ export function gets({ req }) {
     }));
 }
 
+export function get({ req }) {
+  return Promise.all([
+    request
+      .get(`https://chaus.now.sh/apis/kijimuna/users/${req.params.id}`)
+      .set(headers)
+      .send({
+        service: service.get(req),
+        fields: 'id,name,icon,custom'
+      }),
+    request
+      .get(
+        `https://chaus.now.sh/apis/kijimuna/groups?user=${
+          req.params.id
+        }&limit=1000`
+      )
+      .set(headers)
+      .send({
+        service: service.get(req),
+        fields: 'id,name,icon,custom'
+      })
+  ]).then(([{ body: { id, name, icon, custom } }, { body: { items } }]) => ({
+    id,
+    name,
+    icon,
+    custom,
+    groups: items.map(item => ({
+      id: item.id,
+      name: item.name,
+      icon: item.icon,
+      custom: item.custom
+    }))
+  }));
+}
+
 export function post({ req }) {
   return request
     .post('https://chaus.now.sh/apis/kijimuna/users')
@@ -40,7 +74,27 @@ export function post({ req }) {
       custom: req.body.custom ? JSON.stringify(req.body.custom) : null
     });
 }
+
+export function patch({ req }) {
+  return request
+    .patch(`https://chaus.now.sh/apis/kijimuna/users/${req.params.id}`)
+    .set(headers)
+    .send({
+      icon: req.body.icon,
+      custom: req.body.custom ? JSON.stringify(req.body.custom) : null
+    });
+}
+
+export function remove({ req }) {
+  return request
+    .post(`https://chaus.now.sh/apis/kijimuna/users/${req.params.id}`)
+    .set(headers)
+    .send();
+}
 export default {
   gets,
-  post
+  get,
+  post,
+  patch,
+  remove
 };
