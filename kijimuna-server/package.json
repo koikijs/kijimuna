@@ -7,9 +7,7 @@
     "start": "npm run test && npm run build && node dist/index",
     "build": "babel src --out-dir dist",
     "trancate": "npx babel-node bin/trancate-services",
-    "test": "jest src",
-    "p": "prettier --write 'src/**/*.js'",
-    "p:w": "onchange 'src/**/*.js' -- prettier --write {{changed}}"
+    "test": "jest src"
   },
   "repository": {
     "type": "git",
@@ -49,7 +47,6 @@
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-node": "^8.0.1",
-    "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.1.0",

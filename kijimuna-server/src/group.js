@@ -1,14 +1,14 @@
-import request from 'superagent';
-import service from './service';
-import validate from './validate';
+import request from 'superagent'
+import service from './service'
+import validate from './validate'
 
-const KIJIMUNA_CHAUS_CLIENT_ID = process.env.KIJIMUNA_CHAUS_CLIENT_ID;
-const KIJIMUNA_CHAUS_SECRET_ID = process.env.KIJIMUNA_CHAUS_SECRET_ID;
+const KIJIMUNA_CHAUS_CLIENT_ID = process.env.KIJIMUNA_CHAUS_CLIENT_ID
+const KIJIMUNA_CHAUS_SECRET_ID = process.env.KIJIMUNA_CHAUS_SECRET_ID
 const headers = {
   'x-chaus-client': KIJIMUNA_CHAUS_CLIENT_ID,
   'x-chaus-secret': KIJIMUNA_CHAUS_SECRET_ID
-};
-export function gets({ req }) {
+}
+export function gets ({ req }) {
   return request
     .get('https://chaus.now.sh/apis/kijimuna/groups')
     .set(headers)
@@ -23,71 +23,91 @@ export function gets({ req }) {
       limit,
       size,
       items: items.map(item => ({
-        ...item,
+        id: item.name,
+        icon: item.icon,
         custom: item.custom ? JSON.stringify(item.custom) : null
       }))
-    }));
-}
-
-export function get({ req, params = {} }) {
-  return Promise.all([
-    request
-      .get(
-        `https://chaus.now.sh/apis/kijimuna/groups/${params.group ||
-          req.params.id}`
-      )
-      .set(headers)
-      .query({
-        service: params.service || service.get(req),
-        fields: 'id,name,icon,custom'
-      }),
-    request
-      .get('https://chaus.now.sh/apis/kijimuna/attendees?expands=user')
-      .set(headers)
-      .query({
-        service: params.service || service.get(req),
-        group: params.group || req.params.id,
-        limit: 1000
-      })
-  ]).then(([group, attendees]) => ({
-    ...group.body,
-    custom: group.body.custom ? JSON.stringify(group.body.custom) : null,
-    attendees: attendees.body.items.map(item => ({
-      id: item.user.id,
-      name: item.user.name,
-      icon: item.user.icon,
-      custom: item.user.custom ? JSON.stringify(item.user.custom) : null
     }))
-  }));
 }
 
-export function post({ req }) {
+export function get ({ req, params = {} }) {
+  return getByName({ req, params })
+    .then(group =>
+      request
+        .get('https://chaus.now.sh/apis/kijimuna/attendees?expands=user')
+        .set(headers)
+        .query({
+          service: params.service || service.get(req),
+          group: group.id,
+          limit: 1000
+        })
+        .then(attendees => ({
+          group,
+          attendees: attendees.body
+        }))
+    )
+    .then(({ group, attendees }) => ({
+      id: group.name,
+      icon: group.icon,
+      custom: group.custom ? JSON.stringify(group.custom) : null,
+      attendees: attendees.items.map(item => ({
+        id: item.user.name,
+        icon: item.user.icon,
+        custom: item.user.custom ? JSON.stringify(item.user.custom) : null
+      }))
+    }))
+}
+
+export function post ({ req }) {
   return request
     .post('https://chaus.now.sh/apis/kijimuna/groups')
     .set(headers)
     .send({
       service: service.get(req),
-      name: req.body.name,
+      name: req.body.id,
       icon: req.body.icon,
       custom: req.body.custom ? JSON.stringify(req.body.custom) : null
-    });
+    })
+    .then(({ body: { id } }) =>
+      request
+        .get(`https://chaus.now.sh/apis/kijimuna/groups/${id}`)
+        .set(headers)
+        .send()
+        .then(({ body }) => ({ id: body.name }))
+    )
 }
 
-export function patch({ req }) {
+export function getByName ({ req, params = {} }) {
   return request
-    .patch(`https://chaus.now.sh/apis/kijimuna/groups/${req.params.id}`)
+    .get('https://chaus.now.sh/apis/kijimuna/groups')
     .set(headers)
-    .send({
-      icon: req.body.icon,
-      custom: req.body.custom ? JSON.stringify(req.body.custom) : null
-    });
+    .query({
+      service: params.service || service.get(req),
+      name: params.group || req.params.id,
+      fields: 'id,name,icon,custom'
+    })
+    .then(groups => groups.body.items[0])
 }
 
-export function remove({ req }) {
-  return request
-    .delete(`https://chaus.now.sh/apis/kijimuna/groups/${req.params.id}`)
-    .set(headers)
-    .send();
+export function patch ({ req }) {
+  return getByName({ req }).then(group =>
+    request
+      .patch(`https://chaus.now.sh/apis/kijimuna/groups/${group.id}`)
+      .set(headers)
+      .send({
+        icon: req.body.icon,
+        custom: req.body.custom ? JSON.stringify(req.body.custom) : null
+      })
+  )
+}
+
+export function remove ({ req }) {
+  return getByName({ req }).then(group =>
+    request
+      .delete(`https://chaus.now.sh/apis/kijimuna/groups/${group.id}`)
+      .set(headers)
+      .send()
+  )
 }
 
 export default {
@@ -95,5 +115,6 @@ export default {
   get,
   post,
   patch,
-  remove
-};
+  remove,
+  getByName
+}
