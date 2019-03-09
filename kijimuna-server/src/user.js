@@ -36,7 +36,7 @@ export function getByName ({ req, params = {} }) {
     .set(headers)
     .query({
       service: params.service || service.get(req),
-      name: params.group || req.params.id,
+      name: params.id || req.params.id,
       fields: 'id,name,icon,custom'
     })
     .then(users => users.body.items[0])
@@ -49,20 +49,18 @@ export function get ({ req }) {
         request
           .get(`https://chaus.now.sh/apis/kijimuna/users/${user.id}`)
           .set(headers)
-          .send({
+          .query({
             service: service.get(req),
             fields: 'id,name,icon,custom'
           }),
         request
-          .get(
-            `https://chaus.now.sh/apis/kijimuna/groups?user=${
-              user.id
-            }&limit=1000`
-          )
+          .get('https://chaus.now.sh/apis/kijimuna/attendees')
           .set(headers)
-          .send({
+          .query({
             service: service.get(req),
-            fields: 'id,name,icon,custom'
+            expands: 'group',
+            user: user.id,
+            limit: 1000
           })
       ])
     )
@@ -72,9 +70,9 @@ export function get ({ req }) {
       icon,
       custom,
       groups: items.map(item => ({
-        id: item.name,
-        icon: item.icon,
-        custom: item.custom
+        id: item.group.name,
+        icon: item.group.icon,
+        custom: item.group.custom ? JSON.stringify(item.group.custom) : null
       }))
     }))
 }

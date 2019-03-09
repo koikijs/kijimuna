@@ -29,7 +29,7 @@ export default function (app) {
     group.gets({ req }).then(
       body => res.json(body),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -40,7 +40,7 @@ export default function (app) {
     group.get({ req }).then(
       body => res.json(body),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -59,7 +59,7 @@ export default function (app) {
     group.post({ req }).then(
       response => res.json(response),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -75,7 +75,7 @@ export default function (app) {
     group.patch({ req }).then(
       response => res.json({ id: response.body.id }),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -86,7 +86,7 @@ export default function (app) {
     group.remove({ req }).then(
       response => res.json({}),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -97,7 +97,7 @@ export default function (app) {
     user.gets({ req }).then(
       body => res.json(body),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -117,7 +117,7 @@ export default function (app) {
     user.post({ req }).then(
       response => res.json(response),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -129,7 +129,7 @@ export default function (app) {
     user.get({ req }).then(
       body => res.json(body),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -146,7 +146,7 @@ export default function (app) {
     user.patch({ req }).then(
       response => res.json({ id: response.body.id }),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -157,7 +157,7 @@ export default function (app) {
     user.remove({ req }).then(
       response => res.json({}),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -171,7 +171,7 @@ export default function (app) {
     attendee.post({ req }).then(
       response => res.json({}),
       error => {
-        res.status(error.status).json(error.response.body)
+        res.json(error.response ? error.response.body : {})
       }
     )
   })
@@ -188,6 +188,7 @@ export default function (app) {
     }
     attendee.gets({ req }).then(
       items => {
+        console.log(items)
         if (items.length !== 1) {
           res.status(404).json({
             error: 'user does not found in the group.'
@@ -208,5 +209,6 @@ export default function (app) {
       }
     )
   })
+
   return app
 }

@@ -1,17 +1,62 @@
+const fetch = require("isomorphic-unfetch");
 const passport = require("passport");
 const PassportGithub = require("passport-github2");
 const session = require("express-session");
+const config = require("../config");
+const headers = {
+  "Content-Type": "application/json",
+  ...config.kijimuna.auth
+};
 
-const applyStrategy = function(config, origin) {
+const applyStrategy = function(options, origin) {
   passport.use(
     new PassportGithub.Strategy(
       {
-        clientID: config.client,
-        clientSecret: config.secret,
+        clientID: options.client,
+        clientSecret: options.secret,
         callbackURL: `${origin}/auth/github/callback`
       },
-      (accessToken, refreshToken, profile, cb) =>
-        cb(null, { ...profile, token: accessToken })
+      (accessToken, refreshToken, profile, cb) => {
+        Promise.all([
+          fetch(`${config.kijimuna.url}/api/users`, {
+            method: "POST",
+            headers,
+            body: JSON.stringify({
+              id: profile.username,
+              icon: profile._json.avatar_url
+            })
+          }),
+          fetch(profile._json.organizations_url).then(res => res.json())
+        ])
+          .then(([user, items]) =>
+            Promise.all(
+              items.map(item =>
+                fetch(`${config.kijimuna.url}/api/groups`, {
+                  method: "POST",
+                  headers,
+                  body: JSON.stringify({
+                    id: item.login,
+                    icon: item.avatar_url
+                  })
+                }).then(() =>
+                  fetch(
+                    `${config.kijimuna.url}/api/groups/${encodeURIComponent(
+                      item.login
+                    )}/attendees`,
+                    {
+                      method: "POST",
+                      headers,
+                      body: JSON.stringify({
+                        user: profile.username
+                      })
+                    }
+                  )
+                )
+              )
+            )
+          )
+          .then(() => cb(null, { ...profile, token: accessToken }));
+      }
     )
   );
 };
@@ -33,12 +78,12 @@ const applyEndpoint = function(app) {
   );
 };
 
-module.exports = function(app, config, origin) {
+module.exports = function(app, options, origin) {
   app.use(
     session({
       secret: "keyboard cat",
-      resave: true,
-      saveUninitialized: true
+      resave: false,
+      saveUninitialized: false
     })
   );
 
@@ -51,7 +96,7 @@ module.exports = function(app, config, origin) {
     cb(null, obj);
   });
 
-  applyStrategy(config, origin);
+  applyStrategy(options, origin);
 
   app.use(passport.initialize());
   app.use(passport.session());

@@ -1,54 +1,44 @@
 const fetch = require("isomorphic-unfetch");
 const config = require("../config");
+const headers = {
+  "Content-Type": "application/json",
+  ...config.kijimuna.auth
+};
 
 // TODO: Refactoring logic cuz dirty shit...
 module.exports = function(app) {
-  app.get("/api/sync", (req, res) => {
-    if (req.user) {
-      fetch(`${config.kijimuna.url}/api/users`, {
-        method: "POST",
-        headers: config.kijimuna.auth,
-        body: {
-          id: req.user.login
-        }
+  app.get("/api/groups/:id", (req, res) => {
+    fetch(
+      `${config.kijimuna.url}/api/groups/${encodeURIComponent(req.params.id)}`,
+      {
+        headers
+      }
+    )
+      .then(res => res.json())
+      .then(json => res.json(json));
+  });
+  app.post("/api/token", (req, res) => {
+    fetch(`${config.kijimuna.url}/api/token`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        group: req.body.group,
+        user: req.user.username
       })
-        .catch(() => {})
-        .then(() => {
-          fetch(req.user._json.organizations_url);
-        })
-        .then(res => res.json())
-        .then(items =>
-          Promise.all(
-            items.map(item =>
-              fetch(`${config.kijimuna.url}/api/groups`, {
-                method: "POST",
-                headers: config.kijimuna.auth,
-                body: {
-                  id: item.login
-                }
-              })
-            )
-          )
-            .catch(() => {})
-            .then(() =>
-              Promise.all(
-                items.map(item =>
-                  fetch(`${config.kijimuna.url}/api/groups/attendees`, {
-                    method: "POST",
-                    headers: config.kijimuna.auth,
-                    body: {
-                      user: req.user.login,
-                      group: item.login
-                    }
-                  })
-                )
-              )
-            )
-        )
-        .catch(() => {})
-        .then(() => res.json({}));
-    } else {
-      res.status(401).json({});
-    }
+    })
+      .then(res => res.json())
+      .then(json => res.json(json));
+  });
+  app.get("/api/me", (req, res) => {
+    fetch(
+      `${config.kijimuna.url}/api/users/${encodeURIComponent(
+        req.user.username
+      )}`,
+      {
+        headers
+      }
+    )
+      .then(res => res.json())
+      .then(json => res.json(json));
   });
 };

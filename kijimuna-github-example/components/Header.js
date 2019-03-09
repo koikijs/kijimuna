@@ -1,7 +1,12 @@
 import styled from "styled-components";
 import theme from "../themes/vibrant";
 
-export default () => <Header theme={theme}>Hoge Group</Header>;
+export default ({ title, icon }) => (
+  <Header theme={theme}>
+    <Icon src={icon} theme={theme} />
+    {title}
+  </Header>
+);
 
 const Header = styled.div`
   color: ${props => props.theme.main.primary};
@@ -10,4 +15,16 @@ const Header = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Icon = styled.div`
+  width: 25px;
+  height: 25px;
+  background-image: url(${props => props.src});
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 50%;
+  margin-right: 10px;
+  background-position: center;
+  background-color: ${props => props.theme.main.primary};
 `;

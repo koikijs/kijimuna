@@ -1,16 +1,49 @@
+import React from "react";
 import styled from "styled-components";
+import { PROPS, ACTION_ID } from "../../kijimuna-server/src/constants";
 import theme from "../themes/vibrant";
 
-export default () => (
-  <SendMessage theme={theme}>
-    <TextArea theme={theme} />
-    <SendButton theme={theme}>
-      <i className="fas fa-running" />
-    </SendButton>
-  </SendMessage>
-);
+export default class SendMessage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      message: ""
+    };
+  }
+  render() {
+    return (
+      <Div theme={theme}>
+        <TextArea
+          theme={theme}
+          onChange={event => {
+            this.setState({ message: event.target.value });
+          }}
+          value={this.state.message}
+        />
+        <SendButton
+          theme={theme}
+          onClick={() => {
+            this.props.websocket.send(
+              JSON.stringify({
+                [PROPS.ACTION]: ACTION_ID.SEND,
+                [PROPS.DATA]: {
+                  [PROPS.MESSAGE]: this.state.message
+                }
+              })
+            );
+            this.setState({
+              message: ""
+            });
+          }}
+        >
+          <i className="fas fa-running" />
+        </SendButton>
+      </Div>
+    );
+  }
+}
 
-const SendMessage = styled.div`
+const Div = styled.div`
   color: ${props => props.theme.main.primary};
   background-color: ${props => props.theme.back.primary};
   height: 8em;

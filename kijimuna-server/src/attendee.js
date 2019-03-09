@@ -15,16 +15,18 @@ export function gets ({ req }) {
   return Promise.all([
     group.getByName({ req, params: { id: req.body.group } }),
     user.getByName({ req, params: { id: req.body.user } })
-  ]).then(([group, user]) =>
-    request
-      .get('https://chaus.now.sh/apis/kijimuna/attendees')
-      .set(headers)
-      .send({
-        service: service.get(req),
-        group: group.id,
-        user: user.id
-      })
-      .then(response => response.body.items)
+  ]).then(
+    ([group, user]) =>
+      console.log(group, user) ||
+      request
+        .get('https://chaus.now.sh/apis/kijimuna/attendees')
+        .set(headers)
+        .query({
+          service: service.get(req),
+          group: group.id,
+          user: user.id
+        })
+        .then(response => response.body.items)
   )
 }
 

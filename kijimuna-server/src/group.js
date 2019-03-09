@@ -22,11 +22,13 @@ export function gets ({ req }) {
       offset,
       limit,
       size,
-      items: items.map(item => ({
-        id: item.name,
-        icon: item.icon,
-        custom: item.custom ? JSON.stringify(item.custom) : null
-      }))
+      items:
+        console.log(items) ||
+        items.map(item => ({
+          id: item.name,
+          icon: item.icon,
+          custom: item.custom ? JSON.stringify(item.custom) : null
+        }))
     }))
 }
 
@@ -83,7 +85,7 @@ export function getByName ({ req, params = {} }) {
     .set(headers)
     .query({
       service: params.service || service.get(req),
-      name: params.group || req.params.id,
+      name: params.id || req.params.id,
       fields: 'id,name,icon,custom'
     })
     .then(groups => groups.body.items[0])

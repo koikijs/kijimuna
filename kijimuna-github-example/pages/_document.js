@@ -56,6 +56,7 @@ export default class MyDocument extends Document {
             }
             a {
               text-decoration: none;
+              cursor: pointer;
             }
             `}
           </style>

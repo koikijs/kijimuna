@@ -9,7 +9,9 @@ module.exports = {
   isDev,
   origin,
   kijimuna: {
-    url: "https://kijimuna.now.sh",
+    url: "http://localhost:3010",
+    ws: "ws://localhost:3010",
+    // url: "https://kijimuna.now.sh",
     auth: {
       client: process.env.KIJIMUNA_EXAMPLE_CLIENT,
       secret: process.env.KIJIMUNA_EXAMPLE_SECRET
