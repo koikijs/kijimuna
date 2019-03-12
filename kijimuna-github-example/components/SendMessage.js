@@ -57,9 +57,9 @@ const TextArea = styled.textarea`
   width: 100%;
   margin: 0 20px;
   border-radius: 1em;
-  height: 2em;
+  height: 2.5em;
   outline: none;
-  padding: 1em;
+  padding: 10px;
   resize: none;
   font-size: 16px;
 `;

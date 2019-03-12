@@ -34,11 +34,20 @@ const Navigation = styled.div`
   display: flex;
   color: ${props => props.theme.main.secondary};
   background-color: ${props => props.theme.back.secondary};
-  width: 30%;
+  width: 250px;
+  height: 100%;
   max-width: 250px;
   font-weight: 300;
   flex-direction: column;
   padding: 20px 0;
+  @media (max-width: 700px) {
+    position: absolute:
+    left: -100%;
+    &.isOpen {
+      left: 0%;
+      
+    }
+  }
 `;
 
 const List = styled.ul`
@@ -53,7 +62,7 @@ const A = styled.a`
   background-color: ${props =>
     props.isSelected ? props.theme.main.secondary : "none"};
   padding: 10px;
-  font-size: 1.2em;
+  font-size: 1em;
   display: flex;
   align-items: center;
   transition: color, background-color 0.2s;

@@ -79,7 +79,7 @@ const Div = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: stretch;
-  width: 100%;
+  width: calc(100% - 250px);
   flex-direction: column;
 `;
 
