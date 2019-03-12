@@ -25,8 +25,8 @@
 
 - total
 - items[...].id
-- items[...].name
 - items[...].icon
+- items[...].custom
 
 ## POST - /api/groups
 
@@ -37,7 +37,7 @@
 
 ### RQ Body
 
-- name \*
+- id \*
 - icon
 - custom ( JSON )
 
@@ -51,7 +51,6 @@
 ### RS
 
 - id
-- name
 - icon
 - attendees
 
@@ -102,8 +101,8 @@
 - total
 - items
 - items[...].id
-- items[...].name
 - items[...].icon
+- items[...].custom
 - items[...].groups
 
 ## POST - /api/users
@@ -128,9 +127,9 @@
 ### RS
 
 - id
-- name
 - icon
-- attendees
+- custom
+- groups
 
 ## PATCH - /api/users/:user-id
 

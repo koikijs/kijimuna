@@ -1,4 +1,4 @@
-import { PROPS, ID_ACTION } from "../../kijimuna-server/src/constants";
+import { PROPS, ID_ACTION } from "../../../kijimuna-server/src/constants";
 export const WS_SEND_MESSAGE = "WS_SEND_MESSAGE";
 export const WS_RECEIVE_MESSAGE = "WS_RECEIVE_MESSAGE";
 export const WS_FETCH_HISTORY = "WS_FETCH_HISTORY";

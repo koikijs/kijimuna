@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { PROPS, ACTION_ID } from "../../kijimuna-server/src/constants";
+import { PROPS, ACTION_ID } from "../../../kijimuna-server/src/constants";
 import theme from "../themes/vibrant";
 
 export default class SendMessage extends React.Component {
