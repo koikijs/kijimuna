@@ -91,7 +91,7 @@ const Messages = styled.ul`
   overflow-y: scroll;
 `;
 const Message = styled.li`
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const User = styled.div`
