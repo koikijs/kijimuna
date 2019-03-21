@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import theme from "../themes/vibrant";
-import { Link } from "../server/routes";
+import Link from "next/link";
 
 export default ({ groups, selected }) => (
   <Navigation theme={theme}>
@@ -35,7 +35,6 @@ const Navigation = styled.div`
   color: ${props => props.theme.main.secondary};
   background-color: ${props => props.theme.back.secondary};
   width: 250px;
-  height: 100%;
   max-width: 250px;
   font-weight: 300;
   flex-direction: column;
@@ -45,7 +44,7 @@ const Navigation = styled.div`
     left: -100%;
     &.isOpen {
       left: 0%;
-      
+
     }
   }
 `;

@@ -3,7 +3,7 @@ import theme from "../themes/vibrant";
 
 export default ({ title, icon }) => (
   <Header theme={theme}>
-    <Icon src={icon} theme={theme} />
+    {icon ? <Icon src={icon} theme={theme} /> : null}
     {title}
   </Header>
 );

@@ -102,21 +102,16 @@ module.exports = function(app, options, origin) {
   app.use(passport.session());
 
   // Endpoint to confirm authentication is still in valid
-  app.get(
-    "/auth",
-    function(req, res, next) {
-      if (req.isAuthenticated()) {
-        return next();
-      }
-      return res.status(401).json({});
-    },
-    function(req, res) {
+  app.get("/auth", function(req, res, next) {
+    if (req.isAuthenticated()) {
       res.status(200).json({
         id: req.user.id,
         name: req.user.username
       });
+      return;
     }
-  );
+    res.status(401).json({});
+  });
 
   applyEndpoint(app);
 };

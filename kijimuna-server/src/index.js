@@ -14,4 +14,8 @@ app.use(bodyParser.urlencoded({ extended: false }))
 api(app)
 ws(app)
 
-app.listen(process.env.PORT || 3010)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(3010)
+} else {
+  module.exports = app
+}

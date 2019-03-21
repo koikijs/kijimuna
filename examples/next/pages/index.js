@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { connect } from "react-redux";
 import fetch from "isomorphic-unfetch";
-import { Router } from "../server/routes";
+import Router from "next/router";
 
 import Header from "../components/Header";
 import LeftPanel from "../components/LeftPanel";
@@ -10,7 +10,11 @@ import Container from "../components/Container";
 import LoginPopup from "../components/LoginPopup";
 import { set as setUser } from "../reducers/user";
 import { set as setToken } from "../reducers/token";
-import { receive as receiveWs, open as openWs } from "../reducers/ws";
+import {
+  receive as receiveWs,
+  open as openWs,
+  clear as clearMessage
+} from "../reducers/ws";
 import {
   sets as setGroups,
   set as setGroup,
@@ -46,15 +50,37 @@ const Div = styled.div`
   flex-direction: column;
 `;
 
+const getHeaders = ({ req }) => {
+  const headers = {
+    "content-type": "application/json"
+  };
+  if (req && req.headers) {
+    headers.cookie = req.headers.cookie;
+  }
+  return headers;
+};
+
+const fetchAuth = async ({ store, req, group }) => {
+  const res = await fetch(`${config.origin}/auth`, {
+    headers: getHeaders({ req })
+  });
+  const json = await res.json();
+  if (res.ok) {
+    store.dispatch(setUser(json));
+  }
+};
+
 const fetchUser = async ({ store, req, res, group }) => {
   const response = await fetch(`${config.origin}/api/me`, {
-    headers: req.headers
+    headers: getHeaders({ req })
   });
   const json = await response.json();
   store.dispatch(setGroups(json.groups));
   if (!group && json.groups && json.groups.length) {
     if (res) {
-      res.redirect(`${config.origin}/groups/${json.groups[0].id}`);
+      res.writeHead(302, {
+        Location: `${config.origin}/groups/${json.groups[0].id}`
+      });
       res.end();
     } else {
       Router.replace({
@@ -70,7 +96,7 @@ const fetchGroup = async ({ store, req, group }) => {
   const res = await fetch(
     `${config.origin}/api/groups/${encodeURIComponent(group)}`,
     {
-      headers: req.headers
+      headers: getHeaders({ req })
     }
   );
   const json = await res.json();
@@ -80,10 +106,7 @@ const fetchGroup = async ({ store, req, group }) => {
 const issueToken = async ({ store, req, group }) => {
   const res = await fetch(`${config.origin}/api/token`, {
     method: "POST",
-    headers: {
-      ...req.headers,
-      "Content-Type": "application/json"
-    },
+    headers: getHeaders({ req }),
     body: JSON.stringify({
       group
     })
@@ -100,25 +123,16 @@ const getGroupFromUrl = pathname => {
 Main.getInitialProps = async ({ req = {}, asPath, store, isServer, res }) => {
   const group = getGroupFromUrl(asPath);
 
-  if (req.user) {
-    store.dispatch(
-      setUser({
-        id: req.user.id,
-        name: req.user.username
-      })
-    );
+  store.dispatch(clearMessage());
+
+  if (!store.getState().user.item) {
+    await fetchAuth({ req, store, res });
     await fetchUser({ req, store, res, group });
   }
-  const user = store.getState().user.item;
-  if (user && group) {
-    await Promise.all([
-      fetchGroup({ req, store, group }),
-      issueToken({
-        req,
-        store,
-        group
-      })
-    ]);
+
+  if (store.getState().user.item && group) {
+    await fetchGroup({ req, store, group });
+    await issueToken({ req, store, group });
   }
   return {};
 };

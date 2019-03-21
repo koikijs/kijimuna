@@ -1,5 +1,6 @@
-import { PROPS, ID_ACTION } from "../../../kijimuna-server/src/constants";
+import { PROPS, ID_ACTION } from "../constants";
 export const WS_SEND_MESSAGE = "WS_SEND_MESSAGE";
+export const WS_CLEAR_MESSAGE = "WS_CLEAR_MESSAGE";
 export const WS_RECEIVE_MESSAGE = "WS_RECEIVE_MESSAGE";
 export const WS_FETCH_HISTORY = "WS_FETCH_HISTORY";
 export const WS_UPDATE_MEMBER = "WS_UPDATE_MEMBER";
@@ -20,6 +21,11 @@ export default function reducer(
   console.log(action);
   switch (action.type) {
     case WS_OPEN:
+      return {
+        ...state,
+        messages: []
+      };
+    case WS_CLEAR_MESSAGE:
       return {
         ...state,
         messages: []
@@ -50,6 +56,11 @@ export default function reducer(
 export function open() {
   return {
     type: WS_OPEN
+  };
+}
+export function clear() {
+  return {
+    type: WS_CLEAR_MESSAGE
   };
 }
 

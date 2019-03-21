@@ -1,7 +1,7 @@
 {
   "name": "kijimuna",
   "version": 2,
-  "builds": [{ "src": "dist/index.js", "use": "@now/node-server" }],
+  "builds": [{ "src": "dist/index.js", "use": "@now/node" }],
   "routes": [{ "src": "/.*", "dest": "/dist/index.js" }],
   "alias": "kijimuna.now.sh"
 }

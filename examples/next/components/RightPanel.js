@@ -32,32 +32,36 @@ export default class RightPanel extends React.Component {
   }
 
   connect(token) {
-    const websocket = ws(`${config.kijimuna.ws}/ws/connects/${token}`);
-    websocket.onopen = () => {
-      this.props.onOpen();
-    };
-    websocket.onclose = () => {
-      this.props.onClose();
-    };
-    websocket.onmessage = message => {
-      let json = {};
-      try {
-        json = JSON.parse(message.data);
-      } catch (e) {}
-      this.props.onReceive(json);
-    };
-    this.setState({
-      websocket
-    });
+    console.log(token);
+    if (token) {
+      const websocket = ws(`${config.kijimuna.ws}/ws/connects/${token}`);
+      websocket.onopen = () => {
+        this.props.onOpen();
+      };
+      websocket.onclose = () => {
+        this.props.onClose();
+      };
+      websocket.onmessage = message => {
+        let json = {};
+        try {
+          json = JSON.parse(message.data);
+        } catch (e) {}
+        this.props.onReceive(json);
+      };
+      this.setState({
+        websocket
+      });
+    }
   }
 
   render() {
-    const attendees = this.props.group.attendees;
+    const group = this.props.group || {};
+    const attendees = group.attendees || [];
     const findUser = user =>
       (attendees.find(attendee => attendee.id === user) || {}).icon;
     return (
       <Div>
-        <Header title={this.props.group.id} icon={this.props.group.icon} />
+        <Header title={group.id} icon={group.icon} />
         <Messages theme={theme}>
           {this.props.ws.messages.map(message => (
             <Message key={message.id}>

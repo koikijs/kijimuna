@@ -8,7 +8,9 @@ const connects = {}
 
 export function send (ws, from, data) {
   const json = JSON.stringify(data)
-  ws.send(json)
+  if (ws.readyState === 1) {
+    ws.send(json)
+  }
 }
 
 export function multicast (clients, msg, from) {
@@ -51,7 +53,7 @@ export default function (app) {
     token
       .pop(req.params.token)
       .then(connector => {
-        console.log(connector)
+        console.log('token connector is ', connector)
         return group
           .get({ params: { id: connector.group, service: connector.service } })
           .then(res => ({
@@ -64,7 +66,7 @@ export default function (app) {
           // eslint-disable-next-line no-param-reassign
           ws.id = connector.user
           // eslint-disable-next-line no-console
-          console.log('connected!')
+          console.log('connected!', ws.id)
 
           // Initialize group if not exists
           if (!connects[connector.group]) {
@@ -88,6 +90,7 @@ export default function (app) {
           })
 
           ws.on('close', () => {
+            console.log('closed!', ws.id)
             // eslint-disable-next-line no-param-reassign
             connects[connector.group].clients = connects[
               connector.group
@@ -154,7 +157,9 @@ export default function (app) {
         },
         err => {
           console.error(err)
-          ws.close()
+          if (ws.readyState === 0 || ws.readyState === 1) {
+            ws.close()
+          }
         }
       )
   })
