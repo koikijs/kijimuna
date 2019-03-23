@@ -23,7 +23,7 @@ export function gets ({ req }) {
       limit,
       size,
       items:
-        console.log(items) ||
+        console.log('#group - gets', items) ||
         items.map(item => ({
           id: item.name,
           icon: item.icon,

@@ -26,7 +26,9 @@ const applyStrategy = function(options, origin) {
               icon: profile._json.avatar_url
             })
           }),
-          fetch(profile._json.organizations_url).then(res => res.json())
+          fetch(
+            `https://api.github.com/user/orgs?access_token=${accessToken}`
+          ).then(res => res.json())
         ])
           .then(([user, items]) =>
             Promise.all(
@@ -62,7 +64,13 @@ const applyStrategy = function(options, origin) {
 };
 
 const applyEndpoint = function(app) {
-  app.get(`/auth/github`, passport.authenticate("github", { session: true }));
+  app.get(
+    `/auth/github`,
+    passport.authenticate("github", {
+      session: true,
+      scope: ["read:user", "read:org"]
+    })
+  );
 
   app.get(
     `/auth/github/callback`,
@@ -104,6 +112,7 @@ module.exports = function(app, options, origin) {
   // Endpoint to confirm authentication is still in valid
   app.get("/auth", function(req, res, next) {
     if (req.isAuthenticated()) {
+      console.log(req.user);
       res.status(200).json({
         id: req.user.id,
         name: req.user.username

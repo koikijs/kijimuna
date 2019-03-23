@@ -39,6 +39,7 @@ if (config.isDev) {
     error => console.log(error)
   );
 } else {
-  initialize();
-  module.exports = app;
+  initialize(app => {
+    module.exports = app;
+  });
 }

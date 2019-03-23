@@ -51,13 +51,20 @@ const Div = styled.div`
 `;
 
 const getHeaders = ({ req }) => {
-  const headers = {
-    "content-type": "application/json"
-  };
-  if (req && req.headers) {
-    headers.cookie = req.headers.cookie;
-  }
-  return headers;
+  return req && req.headers
+    ? {
+        "content-type": "application/json",
+        "accept-encoding": "gzip, deflate, br",
+        "accept-language": "en",
+        "cache-control": "no-cache",
+        cookie: decodeURIComponent(req.headers.cookie),
+        origin: config.origin,
+        pragma: "no-cache",
+        "user-agent": req.headers["user-agent"]
+      }
+    : {
+        "content-type": "application/json"
+      };
 };
 
 const fetchAuth = async ({ store, req, group }) => {
@@ -100,6 +107,7 @@ const fetchGroup = async ({ store, req, group }) => {
     }
   );
   const json = await res.json();
+  console.log(json, req && req.headers ? req.headers.cookie : "", res.ok);
   store.dispatch(setGroup(json));
 };
 
@@ -112,11 +120,12 @@ const issueToken = async ({ store, req, group }) => {
     })
   });
   const json = await res.json();
+  console.log(json, req && req.headers ? req.headers.cookie : "", res.ok);
   store.dispatch(setToken(json.token));
 };
 
 const getGroupFromUrl = pathname => {
-  const matched = pathname.match(/^\/groups\/(.+)$/);
+  const matched = pathname.match(/^\/groups\/([^\?\/]+)/);
   return matched ? matched[1] : "";
 };
 

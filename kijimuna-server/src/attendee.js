@@ -17,7 +17,7 @@ export function gets ({ req }) {
     user.getByName({ req, params: { id: req.body.user } })
   ]).then(
     ([group, user]) =>
-      console.log(group, user) ||
+      console.log('#attendee - gets', req.body, group, user) ||
       request
         .get('https://chaus.now.sh/apis/kijimuna/attendees')
         .set(headers)

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import ReactMarkdown from "react-markdown";
 import SendMessage from "../components/SendMessage";
 import Header from "../components/Header";
 import theme from "../themes/vibrant";
@@ -69,7 +70,9 @@ export default class RightPanel extends React.Component {
                 <Icon src={findUser(message.posted)} theme={theme} />
                 <Name>{message.posted}</Name>
               </User>
-              <Text theme={theme}>{message.message}</Text>
+              <Text theme={theme}>
+                <ReactMarkdown source={message.message} />
+              </Text>
             </Message>
           ))}
         </Messages>
@@ -124,4 +127,7 @@ const Text = styled.pre`
   color: ${props => props.theme.back.primary};
   font-size: 1.2em;
   font-family: Roboto;
+  & ul {
+    list-style-type: disc;
+  }
 `;

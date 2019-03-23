@@ -17,7 +17,14 @@ export default function (app) {
         })
       },
       error => {
-        console.error(error)
+        console.error(
+          '/api/services - POST - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
         res.status(500).json({})
       }
     )
@@ -30,6 +37,14 @@ export default function (app) {
       body => res.json(body),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/groups - GET - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -41,6 +56,14 @@ export default function (app) {
       body => res.json(body),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/groups/:id - GET - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -60,6 +83,14 @@ export default function (app) {
       response => res.json(response),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/groups - POST - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -76,6 +107,14 @@ export default function (app) {
       response => res.json({ id: response.body.id }),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/groups/:id - PATCH - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -87,6 +126,14 @@ export default function (app) {
       response => res.json({}),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/groups/:id - DELETE - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -98,6 +145,14 @@ export default function (app) {
       body => res.json(body),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/users - GET - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -118,6 +173,14 @@ export default function (app) {
       response => res.json(response),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/users - POST - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -130,6 +193,14 @@ export default function (app) {
       body => res.json(body),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/users/:id - GET - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -147,6 +218,14 @@ export default function (app) {
       response => res.json({ id: response.body.id }),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/users/:id - PATCH - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -158,6 +237,14 @@ export default function (app) {
       response => res.json({}),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/users/:id - DELETE - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -172,6 +259,14 @@ export default function (app) {
       response => res.json({}),
       error => {
         res.json(error.response ? error.response.body : {})
+        console.error(
+          '/api/groups/:id/attendees - POST - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
@@ -204,8 +299,15 @@ export default function (app) {
         })
       },
       error => {
-        console.error(error)
         res.status(500).json({})
+        console.error(
+          '/api/token - POST - error',
+          error,
+          req.params,
+          req.query,
+          req.body,
+          req.headers
+        )
       }
     )
   })
