@@ -71,7 +71,14 @@ export default class RightPanel extends React.Component {
                 <Name>{message.posted}</Name>
               </User>
               <Text theme={theme}>
-                <ReactMarkdown source={message.message} />
+                <ReactMarkdown
+                  skipHtml
+                  source={message.message}
+                  renderers={{
+                    paragraph: props => <div {...props} />,
+                    image: ({ src, ...props }) => <Image src={src} {...props} />
+                  }}
+                />
               </Text>
             </Message>
           ))}
@@ -130,4 +137,17 @@ const Text = styled.pre`
   & ul {
     list-style-type: disc;
   }
+  & p {
+    display: block;
+  }
+`;
+
+const Image = styled.div`
+  background: ${props => `url(${props.src})`};
+  background-repeat: none;
+  background-color: none;
+  background-position: center;
+  background-size: contain;
+  width: 250px;
+  height: 250px;
 `;
