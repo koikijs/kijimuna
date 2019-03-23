@@ -1,9 +1,11 @@
-export const SET_USER = "SET_USER";
+import config from "../config";
+import getHeaders from "../helpers/header";
+
+export const FETCH_USER = "FETCH_USER";
 
 export default function reducer(state = { item: undefined }, action) {
   switch (action.type) {
-    case SET_USER:
-      console.log(action.type, action.user);
+    case FETCH_USER:
       return {
         ...state,
         item: action.user
@@ -13,9 +15,17 @@ export default function reducer(state = { item: undefined }, action) {
   }
 }
 
-export function set(user) {
-  return {
-    type: SET_USER,
-    user
+export function fetchUser({ req, group }) {
+  return async (dispatch, getState) => {
+    const res = await fetch(`${config.origin}/auth`, {
+      headers: getHeaders({ req })
+    });
+    const json = await res.json();
+    if (res.ok) {
+      return dispatch({
+        type: FETCH_USER,
+        user: json
+      });
+    }
   };
 }

@@ -18,7 +18,6 @@ export default function reducer(
   state = { messages: [], on: [], off: [] },
   action
 ) {
-  console.log(action);
   switch (action.type) {
     case WS_OPEN:
       return {

@@ -1,6 +1,7 @@
 // pages/_app.js
 import React from "react";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
+import thunkMiddleware from "redux-thunk";
 import { Provider } from "react-redux";
 import App, { Container } from "next/app";
 import withRedux from "next-redux-wrapper";
@@ -15,7 +16,7 @@ import reducer from "../reducers/index";
  * @param {string} options.storeKey This key will be used to preserve store in global namespace for safe HMR
  */
 const makeStore = (initialState, options) => {
-  return createStore(reducer, initialState);
+  return createStore(reducer, initialState, applyMiddleware(thunkMiddleware));
 };
 
 class MyApp extends App {
