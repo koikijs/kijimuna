@@ -1,0 +1,15 @@
+{
+  "name": "kijimuna-nuxt-example",
+  "version": 2,
+  "builds": [
+    { "src": "package.json", "use": "@now/nuxt" },
+    { "src": "server/index.js", "use": "@now/node" }
+  ],
+  "routes": [
+    { "src": "/api/.*", "dest": "server/index.js" },
+    { "src": "/auth", "dest": "server/index.js" },
+    { "src": "/auth/.*", "dest": "server/index.js" },
+    { "src": "/groups/(?<group>(.+))", "dest": "/index?group=$group" },
+    { "src": "/(.*)", "dest": "/$1" }
+  ]
+}
