@@ -6,7 +6,7 @@ export const FETCH_GROUP = "FETCH_GROUP";
 export const SELECT_GROUP = "SELECT_GROUP";
 
 export default function reducer(
-  state = { items: [], item: undefined, selected: undefined },
+  state = { items: [], item: undefined },
   action
 ) {
   switch (action.type) {
